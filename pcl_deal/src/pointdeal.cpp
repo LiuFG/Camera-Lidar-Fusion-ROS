@@ -83,9 +83,9 @@ void cloud_cb (const sensor_msgs::PointCloud2& input)
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_filtered_z (new pcl::PointCloud<pcl::PointXYZ>);
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_filtered (new pcl::PointCloud<pcl::PointXYZ>);  
    pcl::PassThrough<pcl::PointXYZ> passz;
-  passz.setInputCloud (cloudptr);
+  passz.setInputCloud (cloud_filtered_x);
   passz.setFilterFieldName ("z");
-  passz.setFilterLimits (-1.0,20.0);//雷达安装高度1.73m
+  passz.setFilterLimits (-1.0,5.0);//雷达安装高度1.73m
   passz.setFilterLimitsNegative (false);
   passz.filter(*cloud_filtered_z);
   
@@ -361,7 +361,7 @@ if(!lastRec.empty())
   pcl::toROSMsg(Rec,output1); 
   pcl::toROSMsg(POI,output2);
   output1.header.frame_id =std::string("odom");
-  output2.header.frame_id =std::string("odom");
+  output2.header.frame_id =std::string("kitti_player");
   pub1.publish (output1);
   pub2.publish (output2);
 }

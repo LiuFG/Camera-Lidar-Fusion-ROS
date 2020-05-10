@@ -1,0 +1,39 @@
+<launch>
+
+    <!-- The namespace where images are published -->
+        <arg name="camera" default="/home/lfg//kitti_player/grayscale" />
+
+    <arg    name="directory"
+            default="$(find kitti_player)/dataset/2011_09_26/2011_09_26_drive_0018_sync/"
+            />
+
+    <node   name="kitti_player" pkg="kitti_player" type="kitti_player"
+            output = "screen"
+            required="true"
+            args= "-d $(arg directory) -f 1 -a 1 "
+            />
+
+    <!--rosrun image_view stereo_view stereo:=/kitti_player/grayscale image:=image_rect _approximate_sync:=True-->
+    <group ns="$(arg camera)" >
+            <node   pkg="stereo_image_proc" type="stereo_image_proc" name="stereo_image_proc" required="true">
+                    <param name="approximate_sync" value="true"/>
+            </node>
+    </group>
+
+<!--    <node pkg="tf" type="static_transform_publisher" name="visual_odometry_camera_frame_to_visual_odometry_car_frame"
+          args="0 0 0 -1.570796 0 -1.570796 base_link kitti_player 50" />-->
+
+    <!-- Run the viso2_ros package -->
+    <node pkg="viso2_ros" type="stereo_odometer" name="stereo_odometer" required="true">
+            <remap from="stereo" to="$(arg camera)"/>
+            <remap from="image" to="image_rect"/>
+    </node>
+
+    <!-- Launch RViz
+    <arg  name="rviz" default="$(find kitti_player)/cfg/rviz_kitti_player.rviz" />
+    <node pkg="rviz" type="rviz" name="rviz"
+            args="-d $(arg rviz)"
+            output="screen"
+    />-->
+
+</launch>

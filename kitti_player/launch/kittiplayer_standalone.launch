@@ -1,0 +1,61 @@
+<launch>
+
+<!-- The namespace where images are published -->
+
+    <arg    name="directory"
+     default="/home/lfg/my_work/camera_lidar_fusion/graduate/src/kitti_player/dataset/2011_09_26/2011_09_26_drive_0018_sync/"
+	/>
+
+    <node   name="kitti_player" pkg="kitti_player" type="kitti_player"
+            required="true"
+           args= "-d $(arg directory) -f 1 -a 1 "
+ 
+            output="screen"
+            />
+
+<!-- tf   -->
+   <node pkg="tf" type="static_transform_publisher" name="visual_odometry_camera_frame_to_visual_odometry_car_frame"
+          args="0 0 0 -1.570796 0 -1.570796 base_link kitti_player 50" />
+
+
+
+ <!-- Launch RViz-->
+    <arg  name="rviz" default="$(find kitti_player)/cfg/rviz_kitti_player.rviz" />
+    <node pkg="rviz" type="rviz" name="rviz"
+            args="-d $(arg rviz)"
+            output="screen"
+    />
+
+
+
+    <!--TYPE THIS LINE TO VIEW SOMETHING with the SYNCH MODE enabled-->
+    <!--rosrun image_view image_view image:=/kitti_player/grayscale/left/image_rect-->
+
+    <!--If you have the SYNC MODE enabled also publish this (here @ 1Hz)-->
+    <!--rostopic pub -r 1 /kitti_player/synch std_msgs/Bool "data: true"-->
+
+</launch>
+
+<!--
+	 args= "-d $(arg directory) -a -p map -F 1 -D -V"
+
+KITTIPLAYER command line
+http://projects.ira.disco.unimib.it/projects/kitti_player/wiki/Wiki
+
+help           h    help message
+directory      d    *required* - path to the kitti dataset Directory
+frequency      f    set replay Frequency
+all            a    replay All data
+velodyne       v    replay Velodyne data
+gps            g    replay Gps data
+imu            i    replay Imu data
+grayscale      G    replay Stereo Grayscale images
+color          C    replay Stereo Color images
+viewer         V    enable image viewer
+timestamps     T    use KITTI timestamps
+stereoDisp     s    use pre-calculated disparities
+viewDisp       D    view loaded disparity images
+frame          F    start playing at frame...
+gpsPoints      p    publish GPS/RTK markers to RVIZ, having reference frame as <reference_frame> [example: -p map]
+synchMode      S    Enable Synch mode (wait for signal to load next frame [std_msgs/Bool "data: true"]
+-->
