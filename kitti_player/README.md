@@ -1,9 +1,5 @@
 # kitti_player
 
-## Attention
-
-This package is big enough to 1.1GB because it contains kitti 2011_09_26_drive_0018_sync raw_data
-
 ## Reference
 
  * https://github.com/tomas789/kitti2bag
