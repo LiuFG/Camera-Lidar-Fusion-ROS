@@ -80,7 +80,7 @@ Finally, `catkin_make`.
 - YOLOv3
 
   ```
-  roslaunch daret_ros_lod yolo_v3.launch
+  roslaunch daret_ros_old yolo_v3.launch
   ```
 
   <img src="./figure/yolov3.png" style=zoom:30%>
